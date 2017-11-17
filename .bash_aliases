@@ -18,7 +18,7 @@ alias build-rakudo-no-tests='perl Configure.pl --gen-moar --gen-nqp --backends=m
 alias build-judo='perl Configure.pl --gen-nqp --backends=jvm; make; make test; make install'
 alias build-judo-no-tests='perl Configure.pl --gen-nqp --backends=jvm; make; make install'
 alias abc='perl6 -e '\''my $s = join q{ }, q{a} .. q{z}; $s.subst-mutate: :g, .lc, "»»»" ~ *.uc ~ "«««" for @*ARGS; $s.say'\'''
-alias perlbrew-install-latest='perlbrew install perl-5.26.0 -Duseshrplib -Dusemultiplicity; perlbrew switch perl-5.26.0'
+alias perlbrew-install-latest='perlbrew install perl-5.26.1 -Duseshrplib -Dusemultiplicity; perlbrew switch perl-5.26.1'
 alias spec-remote='(cd t/spec && git remote remove origin && git remote add origin https://github.com/perl6/roast && git push --set-upstream origin master)'
 alias irc="screen -r irc"
 alias tree='tree -f'
