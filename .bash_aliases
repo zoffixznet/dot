@@ -74,6 +74,7 @@ parse_git_branch() {
 }
 shell_name() { if [ "$SN" ]; then echo "$SN "; else echo ""; fi; }
 export PS1="\033[33m\$(shell_name)\033[00m\u@\h\[\033[32m\]\w\[\033[34m\]\$(parse_git_branch)\[\033[00m\]$ "
+export PATH="/home/rakudo/rakudo/install/bin:/home/rakudo/rakudo/install/share/perl6/site/bin:$PATH"
 export PATH="$HOME/rakudo/install/bin:$HOME/rakudo/install/share/perl6/site/bin:$PATH"
 alias update-perl6='
     cd ~/rakudo;
