@@ -1,0 +1,57 @@
+alias l='ls -alF'
+alias grr='git pull --rebase'
+alias gr='git pull'
+alias gs='git status'
+alias gp='git push'
+alias gd='git diff'
+alias gds='git diff --staged'
+alias t='cd `mktemp -d`'
+alias prove6='prove -e "perl6" -vr'
+alias prove6l='prove -e "perl6 -Ilib" -vr'
+alias zef='zef --debug'
+alias cpanm='cpanm -v'
+alias lel='ssh zoffix@perl6.party'
+alias build-rakudo='perl Configure.pl --gen-moar --gen-nqp --backends=moar; make; make test; make install'
+alias build-judo='perl Configure.pl --gen-nqp --backends=jvm; make; make test; make install'
+alias abc='perl6 -e '\''my $s = join q{ }, q{a} .. q{z}; $s.subst-mutate: :g, .lc, "»»»" ~ *.uc ~ "«««" for @*ARGS; $s.say'\'''
+alias tree='tree -f'
+alias tg='tree -f | grep -i '
+alias sr='screen -r '
+alias mi='make install'
+p6() { if [[ -x ./perl6 && ! -d ./perl6 ]]; then ./perl6 "$@"; else command perl6 "$@"; fi; }
+
+alias gcco='gcc -O -Wall -W -pedantic -ansi -std=c99 -o'
+alias gc='perl6 -e '\''my ($prog, @args) = @*ARGS; with shell qq|gcc -O -Wall -W -pedantic -ansi -std=c99 -o "$prog" "$prog.c" && ./$prog @args[]| { exit .exitcode } '\'' '
+g() { gcco "$@" "$@.c" && ./$@; }
+ccc() {
+    (
+        cd $(mktemp -d);
+        echo -e \
+            '#include <stdio.h>\n'\
+            '#include <stdbool.h>\n\n'\
+            'int main(void) { ' > program.c;
+        echo "$@" >> program.c;
+        echo '; return 0; }' >> program.c;
+        gcco program program.c; ./program;
+    );
+}
+parse_git_branch() {
+    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
+shell_name() { if [ "$SN" ]; then echo "$SN "; else echo ""; fi; }
+export PS1="\033[33m\$(shell_name)\033[00m\u@\h\[\033[32m\]\w\[\033[34m\]\$(parse_git_branch)\[\033[00m\]$ "
+export PATH="/home/rakudo/rakudo/install/bin:/home/rakudo/rakudo/install/share/perl6/site/bin:$PATH"
+export PATH="$HOME/rakudo/install/bin:$HOME/rakudo/install/share/perl6/site/bin:$PATH"
+alias update-perl6='
+    cd ~/rakudo;
+    git pull;
+    perl Configure.pl --gen-moar --gen-nqp --backends=moar;
+    make;
+    make test;
+    make install'
+alias update-zef='
+        t;
+        git clone https://github.com/ugexe/zef .;
+        perl6 -Ilib bin/zef install .
+    '
+alias zdeps='zef --depsonly --/test install .'
