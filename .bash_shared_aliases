@@ -1,4 +1,8 @@
-alias sync-aliases='cd; rm .bash_shared_aliases; wget https://raw.githubusercontent.com/zoffixznet/dot/master/.bash_shared_aliases'
+alias sync-aliases='
+    cd; rm .bash_shared_aliases;
+    wget https://raw.githubusercontent.com/zoffixznet/dot/master/.bash_shared_aliases;
+    . .bash_shared_aliases
+    '
 alias l='ls -alF'
 alias grr='git pull --rebase'
 alias gr='git pull'
