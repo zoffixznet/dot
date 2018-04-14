@@ -56,3 +56,4 @@ alias update-zef='
         perl6 -Ilib bin/zef install .
     '
 alias zdeps='zef --depsonly --/test install .'
+alias glop="git log --pretty=format:'<a href='\''https://github.com/perl6/roast/commit/%h'\'' style='\''font-family: monospace'\'' target=_blank>%H | %ad | %s</a><br><br>' --date=short --reverse"
