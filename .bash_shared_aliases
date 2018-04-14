@@ -3,6 +3,7 @@ alias sync-aliases='
     wget https://raw.githubusercontent.com/zoffixznet/dot/master/.bash_shared_aliases;
     . .bash_shared_aliases
     '
+alias G='grep -FIRn'
 alias l='ls -alF'
 alias grr='git pull --rebase'
 alias gr='git pull'
