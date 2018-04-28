@@ -27,19 +27,38 @@ alias mi='make install'
 p6() { if [[ -x ./perl6 && ! -d ./perl6 ]]; then ./perl6 "$@"; else command perl6 "$@"; fi; }
 
 alias gcco='gcc -O -Wall -W -pedantic -ansi -std=c99 -o'
-alias gc='perl6 -e '\''my ($prog, @args) = @*ARGS; with shell qq|gcc -O -Wall -W -pedantic -ansi -std=c99 -o "$prog" "$prog.c" && ./$prog @args[]| { exit .exitcode } '\'' '
-g() { gcco "$@" "$@.c" && ./$@; }
+alias gc='perl6 -e '\''my ($prog, @args) = @*ARGS; with shell qq|gcc -O -Wall -W -pedantic -ansi -std=c99 -llist -lm -o "$prog" "$prog.c" && ./$prog @args[]| { exit .exitcode } '\'' '
+g() { gcco "$@" "$@.c" -lm && ./$@; }
 ccc() {
     (
         cd $(mktemp -d);
         echo -e \
             '#include <stdio.h>\n'\
+            '#include <stdlib.h>\n'\
             '#include <stdbool.h>\n\n'\
+            '#include <math.h>\n\n' \
+            '#include <float.h>\n\n' \
             'int main(void) { ' > program.c;
         echo "$@" >> program.c;
         echo '; return 0; }' >> program.c;
-        gcco program program.c; ./program;
+        g program
     );
+}
+nnn2() {
+    ccc 'printf("Orig num:  ' $@ '\nNext up:    %.20e\n You gave:  %.20e\n Next down: %.20e\n", nextafter(' $@ ', INFINITY),' $@ ', nextafter(' $@' , -INFINITY))'
+}
+nnn() {
+    nnn2 $@ | perl6 -e '
+        .say for my @l = lines;
+        my $orig = (.tail(*-1).join given @l.shift.comb(/\d+/).head(2).join("").comb.List);
+        $orig ~= "0" x 20-$orig.chars;
+        my ($up, $me, $down) = @l.map: *.comb(/\d+/).skip.head;
+        my $up-orig   = $up-$orig;
+        my $orig-down = $orig-$down;
+        say "Parsed orig = $orig\n\nUp   - orig = $up-orig\nOrig - down = $orig-down\n{
+            $up-orig > $orig-down ?? "UP is closer" !! $up-orig == $orig-down ?? "SAME diff" !! "DOWN is close"
+        }";
+        say();'
 }
 
 parse_git_branch() {
@@ -65,3 +84,4 @@ alias update-zef='
     '
 alias zdeps='zef --depsonly --/test install .'
 alias glop="git log --pretty=format:'<a href='\''https://github.com/perl6/roast/commit/%h'\'' style='\''font-family: monospace'\'' target=_blank>%H | %ad | %s</a><br><br>' --date=short --reverse"
+alias C="google-chrome"
